@@ -8,3 +8,4 @@ The detailed process can be summarized as follows.
 2. Decode the Ajax link of each product page to find the product_id.
 3. Find the Ajax link of each product's customer reviews link and replace the product_id to get all product reviews.
 4. Scrapy customer reviews.
+TIP: Ajax URL uses json format data.
