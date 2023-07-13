@@ -46,7 +46,7 @@ class SpiderSpider(scrapy.Spider):
         # Based on pages to build product_urls
         keyword = kwargs['keyword']
         product_urls = [f'https://www.gotools.de/search?query={keyword}&page={page}' for page
-                        in range(3, page_number + 1)]  # page_number + 1
+                        in range(1, page_number + 1)]  # page_number + 1
 
         for product_url in product_urls:
             yield Request(url=product_url, callback=self.product_parse)
@@ -73,7 +73,8 @@ class SpiderSpider(scrapy.Spider):
             try:
                 item['review_id'] = batch_results[i].get('feedbackComment', 'N/A').get('commentId', 'N/A')
                 item['product_name'] = product_name or product_id
-                item['customer_name'] = batch_results[i].get('authorName', 'Anonymous')
+                # item['customer_name'] = batch_results[i].get('authorName', 'Anonymous')
+                item['customer_name'] = batch_results[i].get('authorName') if batch_results[i].get('authorName') else 'Anonymous'
                 item['customer_rating'] = batch_results[i].get('feedbackRating', 'N/A').get('rating', 'N/A').get('ratingValue', 'N/A')
                 item['customer_date'] = batch_results[i].get('feedbackComment', 'N/A').get('comment', 'N/A').get('createdAt', 'N/A')
                 item['customer_review'] = batch_results[i].get('feedbackComment', 'N/A').get('comment', 'N/A').get('message', 'N/A')
