@@ -119,7 +119,7 @@ class DatabasePipeline:
         # Remove unloaded chars
         customer_date = date(item.get('customer_date', ''))
         # Remove unloaded chars and cut
-        customer_review = item.get('customer_review', '')
+        customer_review = item.get('customer_review', '')[0:1999]
         # customer_review_original = item.get('customer_review', '')
         # customer_review = remove_unappealing_characters(' '.join(customer_review_original))
         customer_support = item.get('customer_support', '')

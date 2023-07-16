@@ -19,15 +19,14 @@ class SpiderSpider(scrapy.Spider):
     headers = {}  #
 
     def start_requests(self):
-        # keywords = ['DeWalt', 'Black+and+Decker', 'Stanley', 'Craftsman', 'Porter-Cable', 'Bostitch', 'Irwin+Tools',
-        #             'Lenox']
+        # keywords = ['Stanley', 'Black+Decker', 'Craftsman', 'Porter-Cable', 'Bostitch', 'MAC Tools', 'Lista', 'Irwin', 'Lenox', 'CribMaster', 'Powers Fasteners', 'cub-cadet', 'hustler', 'troy-bilt', 'BigDog Mower',]
+        exist_keywords = ['dewalt', 'stanley'] # black-decker is too less
         # company = 'Stanley Black and Decker'
 
-        keywords = ['dewalt']
         # from search words to generate product_urls
-        for keyword in keywords:
+        for keyword in exist_keywords:
             push_key = {'keyword': keyword}
-            search_url = f'https://www.gotools.de/search?query={keyword}'
+            search_url = f'https://www.gotools.de/marken/{keyword}'
 
             yield Request(
                 url=search_url,
