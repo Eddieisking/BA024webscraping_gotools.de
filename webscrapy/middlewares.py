@@ -193,7 +193,7 @@ class WebscrapyDownloaderMiddleware:
 """In the following code, just need to change self.current_proxy to use new proxy"""
 class RotateProxyMiddleware:
     def __init__(self):
-        self.current_proxy = "http://storm-stst123_area-IT:123123@eu.stormip.cn:1000"
+        self.current_proxy = "http://storm-stst123_area-DE:123123@eu.stormip.cn:1000"
         self.max_retries = 3
 
     @classmethod
