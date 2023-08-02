@@ -27,7 +27,7 @@ class SpiderSpider(scrapy.Spider):
         for keyword in exist_keywords:
             push_key = {'keyword': keyword}
             search_url = f'https://www.gotools.de/marken/{keyword}'
-
+                        # f'https://www.gotools.de/search?query={keyword}'
             yield Request(
                 url=search_url,
                 callback=self.parse,
@@ -48,21 +48,26 @@ class SpiderSpider(scrapy.Spider):
                         in range(1, page_number + 1)]  # page_number + 1
 
         for product_url in product_urls:
-            yield Request(url=product_url, callback=self.product_parse)
+            yield Request(url=product_url, callback=self.product_parse, meta={'product_brand': keyword})
 
     def product_parse(self, response: Request, **kwargs):
+        product_brand = response.meta['product_brand']
         product_list = response.xpath('//*[@id="page-body"]//ul[@class="product-list fx-row grid cross-box"]/li')
 
         for product in product_list:
             product_id = re.search(r'{"item":{"id":(\d+)', product.extract()).group(1)
             product_name = re.search(r'"name1":"(.*?)",', product.extract()).group(1)
-
+            product_model = re.search(r'"number":"(.*?)",', product.extract()).group(1)
+            product_brand = re.search(r'"externalName":"(.*?)"', product.extract()).group(1)
             customer_review_url = f'https://www.gotools.de/rest/feedbacks/feedback/helper/feedbacklist/{product_id}/1?feedbacksPerPage=10'
-            yield Request(url=customer_review_url, callback=self.review_parse, meta={'product_id': product_id, 'product_name': product_name})
+
+            yield Request(url=customer_review_url, callback=self.review_parse, meta={'product_id': product_id, 'product_name': product_name, 'product_brand':product_brand, 'product_model':product_model})
 
     def review_parse(self, response: Request, **kwargs):
         product_id = response.meta['product_id']
         product_name = response.meta['product_name']
+        product_brand = response.meta['product_brand']
+        product_model = response.meta['product_model']
         datas = json.loads(response.body)
         batch_results = datas.get('feedbacks', {})
 
@@ -72,6 +77,10 @@ class SpiderSpider(scrapy.Spider):
             try:
                 item['review_id'] = batch_results[i].get('feedbackComment', 'N/A').get('commentId', 'N/A')
                 item['product_name'] = product_name or product_id
+                item['product_website'] = 'gotools_de'
+                item['product_type'] = 'N/A'
+                item['product_brand'] = product_brand
+                item['product_model'] = product_model
                 # item['customer_name'] = batch_results[i].get('authorName', 'Anonymous')
                 item['customer_name'] = batch_results[i].get('authorName') if batch_results[i].get('authorName') else 'Anonymous'
                 item['customer_rating'] = batch_results[i].get('feedbackRating', 'N/A').get('rating', 'N/A').get('ratingValue', 'N/A')
@@ -82,7 +91,6 @@ class SpiderSpider(scrapy.Spider):
 
                 yield item
             except Exception as e:
-                print('Exception:', e)
                 break
 
 
