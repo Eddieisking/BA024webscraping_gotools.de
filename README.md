@@ -1,11 +1,53 @@
 # BA024webscraping_gotools.de
-This project is quite different from the scrapy projects.
-The website has used Ajax technology to load its product list pages. So it is impossible to extract the product detailed link from each project pages.
-However, from each page of products, we can get the product_id information which is contained in each of Ajax JSON format file. 
-Then, it is lucky that the customer reviews link has a very uniform format that facilitates our project, which informs us to just replace the project_id in each link to get the direct Ajax customer reviews.
-The detailed process can be summarized as follows.
-1. Use search words to open each page of the brand's products.
-2. Decode the Ajax link of each product page to find the product_id.
-3. Find the Ajax link of each product's customer reviews link and replace the product_id to get all product reviews.
-4. Scrapy customer reviews.
-TIP: Ajax URL uses json format data.
+
+This is a web scraping project that focuses on collecting and analyzing data from [gotools.de](https://www.gotools.de/). The goal of the project is to extract customer reviews, date, ratings, and product information from the website for further analysis and insights. The project utilizes the Scrapy framework to automate the process of data collection and processing.
+
+## Project Overview
+
+Web scraping is the process of automatically extracting data from websites. In this project, we aim to gather data for tools brands to gain valuable insights for our analysis. The collected data include ratings, dates, reviews, and other relevant information.
+
+## Objectives
+
+The main objectives of this project are:
+
+- Collect data for mainstream tools brands efficiently and accurately.
+- Process and clean the collected data for analysis.
+- Store the collected data in an SQL database for management.
+
+## Technologies Used
+
+The following technologies are employed in this project:
+
+- **Python**: The primary programming language used for web scraping and data processing.
+- **Scrapy**: A powerful web crawling and scraping framework for Python.
+- **MySQL**: A data storage and management library.
+
+## Project Workflow
+
+1. **Data Collection**: We use web scraping techniques to fetch data from target websites. This involves sending HTTP requests, parsing HTML content, and extracting relevant data.
+2. **Data Cleaning**: The collected data is often messy and requires cleaning. This step involves removing duplicates, handling missing values, and standardizing formats.
+3. **Data translation**: The cleaned data is translated into English for analysis.
+4. **Data storage**: The process data is stored in a SQL database for management.
+
+## Getting Started
+
+To run this project on your local machine, follow these steps:
+
+1. Clone this repository: `git clone https://github.com/Eddieisking/BA024webscraping_gotools.de.git`
+2. Open it in your Python IDE such as Pycharm.
+3. Install the required dependencies: `pip install -r requirements.txt` at terminal.
+4. Change the code in the spider.py to choose the data you want to collect.
+5. Change the config in the items.py and pipelines.py to save the collected data.
+6. Run the command at the terminal: `scrapy crawl spider`. 
+
+
+## Contributions
+
+Contributions to this project are welcome! If you have any suggestions, improvements, or bug fixes, please create an [issue](https://github.com/Eddieisking/BA024webscraping_gotools.de/issues) or submit a pull [request](https://github.com/Eddieisking/BA024webscraping_gotools.de/pulls).
+
+## Contact
+
+If you have any questions or need further assistance, feel free to contact us at [eddieisking2000@gmail.com].
+
+Happy coding!
+
