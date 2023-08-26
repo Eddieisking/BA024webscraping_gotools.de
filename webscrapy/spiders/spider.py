@@ -16,18 +16,18 @@ from webscrapy.items import WebscrapyItem
 class SpiderSpider(scrapy.Spider):
     name = "spider"
     allowed_domains = ["www.gotools.de", "api.bazaarvoice.com"]
-    headers = {}  #
+    headers = {}  
 
     def start_requests(self):
         # keywords = ['Stanley', 'Black+Decker', 'Craftsman', 'Porter-Cable', 'Bostitch', 'MAC Tools', 'Lista', 'Irwin', 'Lenox', 'CribMaster', 'Powers Fasteners', 'cub-cadet', 'hustler', 'troy-bilt', 'BigDog Mower',]
         exist_keywords = ['dewalt', 'stanley'] # black-decker is too less
+        
         # company = 'Stanley Black and Decker'
-
         # from search words to generate product_urls
         for keyword in exist_keywords:
             push_key = {'keyword': keyword}
             search_url = f'https://www.gotools.de/marken/{keyword}'
-                        # f'https://www.gotools.de/search?query={keyword}'
+
             yield Request(
                 url=search_url,
                 callback=self.parse,
@@ -37,6 +37,7 @@ class SpiderSpider(scrapy.Spider):
     def parse(self, response, **kwargs):
         # Extract the pages of product_urls
         last_link = response.xpath('//*[@id="page-body"]//nav[@class="pagination-container"]/ul//li[@class="item pag-arrow-right"]/a[@aria-label="Zur letzten Seite"]/@href')[0].extract()
+        
         # Extract the page number from the last link
         parsed_url = urlparse(last_link)
         query_params = parse_qs(parsed_url.query)
@@ -73,7 +74,6 @@ class SpiderSpider(scrapy.Spider):
 
         for i in range(len(batch_results)):
             item = WebscrapyItem()
-
             try:
                 item['review_id'] = batch_results[i].get('feedbackComment', 'N/A').get('commentId', 'N/A')
                 item['product_name'] = product_name or product_id
